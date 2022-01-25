@@ -4,25 +4,24 @@ import { TAB_CURRENCY } from 'utils/currency';
 import { numAddComma, strToNum } from 'utils/convert';
 
 function InputBox({ amount, setAmount, setReceive, setSource, getRate }) {
-  const changeInput = e => {
+  const updateAmount = e => {
     const { value } = e.target;
     setAmount(numAddComma(strToNum(value)));
     getRate();
   };
 
-  const changeSelect = e => {
+  const changeSourceCurrency = e => {
     const { value } = e.target;
     if (value !== TAB_CURRENCY[0]) setReceive(TAB_CURRENCY[0]);
     else setReceive(TAB_CURRENCY[1]); // 앞으로 초기화
-
     setSource(value);
     getRate();
   };
 
   return (
     <>
-      <Input type="text" onChange={changeInput} value={amount} />
-      <SelectBox onChange={changeSelect}>
+      <Input type="text" onChange={updateAmount} value={amount} />
+      <SelectBox onChange={changeSourceCurrency}>
         {TAB_CURRENCY.map(item => (
           <Option key={item} value={item}>
             {item}

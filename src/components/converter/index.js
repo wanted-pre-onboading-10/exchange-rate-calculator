@@ -1,10 +1,10 @@
-import { numAddComma } from 'utils/convert';
+import { roundToSecond } from 'utils/convert';
 import propTypes from 'prop-types';
 
 function CurrencyConverter({ receive, source, amount }) {
   const convert = (receive / source) * amount;
 
-  return <div>{numAddComma(convert.toFixed(2).toString())}</div>;
+  return <div>{roundToSecond(convert)}</div>;
 }
 
 CurrencyConverter.propTypes = {

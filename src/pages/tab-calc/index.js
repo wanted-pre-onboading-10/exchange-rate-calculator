@@ -11,7 +11,7 @@ import TabMenu from './TabMenu';
 
 function TabCalc() {
   const [loading, setLoading] = useState(true);
-  const [currencyToUSD, setCurrencyToUSD] = useState(null);
+  const [currencyRate, setCurrencyRate] = useState(null);
 
   const [amount, setAmount] = useState('1,000');
   const [source, setSource] = useState(TAB_CURRENCY[0]);
@@ -20,11 +20,11 @@ function TabCalc() {
   const [date, setDate] = useState([]);
 
   const getDate = timestamp => {
-    const d = new window.Date(timestamp * 1000);
+    const currencyDate = new window.Date(timestamp * 1000);
     const dateList = [
-      d.getFullYear(),
-      d.toLocaleString('en-US', { month: 'short' }),
-      d.getDate(),
+      currencyDate.getFullYear(),
+      currencyDate.toLocaleString('en-US', { month: 'short' }),
+      currencyDate.getDate(),
     ];
 
     setDate(dateList);
@@ -35,7 +35,6 @@ function TabCalc() {
     const savedDate =
       savedRateObject &&
       new window.Date(savedRateObject.timestamp * 1000).getDate();
-
     if (savedDate !== new window.Date().getDate()) {
       try {
         const res = await API.get(
@@ -43,7 +42,7 @@ function TabCalc() {
             process.env.REACT_APP_CURRENCY_KEY
           }&currencies=${TAB_CURRENCY.join()}`,
         );
-        setCurrencyToUSD(res.data.quotes);
+        setCurrencyRate(res.data.quotes);
         setLoading(false);
         getDate(res.data.timestamp);
         localStorage.setItem('currencyRate', JSON.stringify(res.data));
@@ -51,7 +50,7 @@ function TabCalc() {
         console.error(error);
       }
     } else {
-      setCurrencyToUSD(savedRateObject.quotes);
+      setCurrencyRate(savedRateObject.quotes);
       getDate(savedRateObject.timestamp);
       setLoading(false);
     }
@@ -66,7 +65,7 @@ function TabCalc() {
   return (
     <Container>
       {loading && <div>loading</div>}
-      {currencyToUSD && (
+      {currencyRate && (
         <>
           <InputBox
             amount={amount}
@@ -78,7 +77,7 @@ function TabCalc() {
 
           <Tab>
             <TabMenu
-              currencyToUSD={currencyToUSD}
+              currencyRate={currencyRate}
               source={source}
               setReceive={setReceive}
             />
@@ -86,8 +85,8 @@ function TabCalc() {
               <Currency>
                 {receive}
                 <CurrencyConverter
-                  receive={currencyToUSD[`USD${receive}`]}
-                  source={currencyToUSD[`USD${source}`]}
+                  receive={currencyRate[`USD${receive}`]}
+                  source={currencyRate[`USD${source}`]}
                   amount={strToNum(amount)}
                 />
               </Currency>
