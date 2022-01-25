@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
+import API from 'utils/api';
+import { SIMPLE_CURRENCY_LIST } from 'utils/currency';
 
 // styled components
 const StyledContainer = styled.main`
@@ -69,11 +70,6 @@ const ErrorMessage = styled.p`
 `;
 
 // constants
-const CURRENCY_LIST = [
-  { currency: 'KRW', country: '한국' },
-  { currency: 'JPY', country: '일본' },
-  { currency: 'PHP', country: '필리핀' },
-];
 const CALCULATOR_TITLE = '환율 계산';
 const SENDER_LABEL = '송금국가';
 const SENDER_COUNTRY = '미국';
@@ -81,7 +77,6 @@ const SENDER_CURRENCY = 'USD';
 const RECIPIENT_LABEL = '수취국가';
 const CURRENCY_LABEL = '환율';
 const ERROR_MESSAGE = '송금액이 바르지 않습니다';
-const API_LINK = `http://www.apilayer.net/api/live?access_key=${process.env.REACT_APP_CURRENCY_KEY}`;
 
 const formatNumber = num => {
   if (typeof num !== 'number') return null;
@@ -109,16 +104,22 @@ function SimpleCalc() {
   const [result, setResult] = useState(0);
 
   useEffect(() => {
-    axios
-      .get(API_LINK)
-      .then(res => {
-        const data = res.data.quotes[`USD${currency}`];
-        setRate(formatNumber(data));
-      })
-      .catch();
+    const getRates = async () => {
+      try {
+        const res = await API.get(
+          `live?access_key=${process.env.REACT_APP_CURRENCY_KEY}`,
+        );
+        const quote = res.data.quotes[`USD${currency}`];
+        setRate(formatNumber(quote));
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getRates();
   }, [currency]);
 
   const handleSelect = e => {
+    if (showMessage) setShowMessage(prev => !prev);
     setCurrency(e.target.value);
   };
 
@@ -163,7 +164,7 @@ function SimpleCalc() {
               name="currency"
               id="currency-box"
               onChange={handleSelect}>
-              {CURRENCY_LIST.map(({ currency: c, country }) => (
+              {SIMPLE_CURRENCY_LIST.map(({ currency: c, country }) => (
                 <option value={c} key={c}>{`${country}(${c})`}</option>
               ))}
             </StyledSelect>
