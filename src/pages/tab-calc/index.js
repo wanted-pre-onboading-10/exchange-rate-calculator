@@ -4,12 +4,12 @@ import styled from 'styled-components';
 import API from 'utils/api';
 import { TAB_CURRENCY } from 'utils/currency';
 import { strToNum, numAddComma } from 'utils/convert';
+import CurrencyConverter from 'components/converter';
 
 function TabCalc() {
   const [loading, setLoading] = useState(true);
   const [currencyToUSD, setCurrencyToUSD] = useState(null);
   const [date, setDate] = useState([]);
-  const [result, setResult] = useState();
 
   const getDate = timestamp => {
     const d = new window.Date(timestamp * 1000);
@@ -22,54 +22,49 @@ function TabCalc() {
     setDate(dateList);
   };
 
-  const getCurrencyRate = async currency => {
+  const getCurrencyRate = async () => {
     try {
       const res = await API.get(
         `live?access_key=${
           process.env.REACT_APP_CURRENCY_KEY
-        }&currencies=${currency.join()}`,
+        }&currencies=${TAB_CURRENCY.join()}`,
       );
       setCurrencyToUSD(res.data.quotes);
       setLoading(false);
       getDate(res.data.timestamp);
+      console.log('!');
     } catch (error) {
       console.error(error);
     }
   };
 
-  const [amount, setAmount] = useState('1'); // init
+  const [amount, setAmount] = useState('1,000');
   const [source, setSource] = useState(TAB_CURRENCY[0]);
   const [receive, setReceive] = useState(TAB_CURRENCY[1]);
-
-  const currencyConverter = () => {
-    const convert =
-      (currencyToUSD[`USD${receive}`] / currencyToUSD[`USD${source}`]) *
-      strToNum(amount);
-
-    setResult(numAddComma(convert.toFixed(2).toString()));
-  };
 
   const changeInput = e => {
     const { value } = e.target;
     setAmount(numAddComma(strToNum(value)));
-    currencyConverter();
+    getCurrencyRate();
   };
 
   const changeSelect = e => {
     const { value } = e.target;
+    if (value !== TAB_CURRENCY[0]) setReceive(TAB_CURRENCY[0]);
+    else setReceive(TAB_CURRENCY[1]); // 앞으로 초기화
+
     setSource(value);
-    currencyConverter();
+    getCurrencyRate();
   };
 
   const changeButton = e => {
     const { value } = e.target;
     setReceive(value);
-    currencyConverter();
   };
 
   useEffect(() => {
     if (loading) {
-      getCurrencyRate(TAB_CURRENCY);
+      getCurrencyRate();
     }
   }, [loading]);
 
@@ -100,7 +95,12 @@ function TabCalc() {
 
             <TabContents>
               <Currency>
-                {receive} : {result}
+                {receive}
+                <CurrencyConverter
+                  receive={currencyToUSD[`USD${receive}`]}
+                  source={currencyToUSD[`USD${source}`]}
+                  amount={strToNum(amount)}
+                />
               </Currency>
               <Date>
                 기준일 :<br />
