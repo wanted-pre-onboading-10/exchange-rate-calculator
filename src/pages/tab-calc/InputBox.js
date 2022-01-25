@@ -19,8 +19,13 @@ function InputBox({ amount, setAmount, setReceive, setSource, getRate }) {
   };
 
   return (
-    <>
-      <Input type="text" onChange={updateAmount} value={amount} />
+    <Container>
+      <Input
+        type="text"
+        onChange={updateAmount}
+        value={amount}
+        maxLength={15}
+      />
       <SelectBox onChange={changeSourceCurrency}>
         {TAB_CURRENCY.map(item => (
           <Option key={item} value={item}>
@@ -28,12 +33,32 @@ function InputBox({ amount, setAmount, setReceive, setSource, getRate }) {
           </Option>
         ))}
       </SelectBox>
-    </>
+    </Container>
   );
 }
 
-const Input = styled.input``;
+const Container = styled.div`
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  width: 250px;
+`;
+
+const Input = styled.input`
+  display: block;
+  padding: 5px 0px 5px 10px;
+  margin-right: 5px;
+  height: 30px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+
+  &:focus {
+    border: 1px solid #000;
+    outline: none;
+  }
+`;
 const SelectBox = styled.select``;
+
 const Option = styled.option``;
 
 InputBox.propTypes = {
