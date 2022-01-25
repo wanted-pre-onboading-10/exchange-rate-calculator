@@ -3,12 +3,20 @@ import styled from 'styled-components';
 
 import API from 'utils/api';
 import { TAB_CURRENCY } from 'utils/currency';
-import { strToNum, numAddComma } from 'utils/convert';
+import { strToNum } from 'utils/convert';
+
 import CurrencyConverter from 'components/converter';
+import InputBox from 'pages/tab-calc/InputBox';
+import TabMenu from './TabMenu';
 
 function TabCalc() {
   const [loading, setLoading] = useState(true);
   const [currencyToUSD, setCurrencyToUSD] = useState(null);
+
+  const [amount, setAmount] = useState('1,000');
+  const [source, setSource] = useState(TAB_CURRENCY[0]);
+  const [receive, setReceive] = useState(TAB_CURRENCY[1]);
+
   const [date, setDate] = useState([]);
 
   const getDate = timestamp => {
@@ -23,43 +31,30 @@ function TabCalc() {
   };
 
   const getCurrencyRate = async () => {
-    try {
-      const res = await API.get(
-        `live?access_key=${
-          process.env.REACT_APP_CURRENCY_KEY
-        }&currencies=${TAB_CURRENCY.join()}`,
-      );
-      setCurrencyToUSD(res.data.quotes);
+    const savedRateObject = JSON.parse(localStorage.getItem('currencyRate'));
+    const savedDate =
+      savedRateObject &&
+      new window.Date(savedRateObject.timestamp * 1000).getDate();
+
+    if (savedDate !== new window.Date().getDate()) {
+      try {
+        const res = await API.get(
+          `live?access_key=${
+            process.env.REACT_APP_CURRENCY_KEY
+          }&currencies=${TAB_CURRENCY.join()}`,
+        );
+        setCurrencyToUSD(res.data.quotes);
+        setLoading(false);
+        getDate(res.data.timestamp);
+        localStorage.setItem('currencyRate', JSON.stringify(res.data));
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      setCurrencyToUSD(savedRateObject.quotes);
+      getDate(savedRateObject.timestamp);
       setLoading(false);
-      getDate(res.data.timestamp);
-      console.log('!');
-    } catch (error) {
-      console.error(error);
     }
-  };
-
-  const [amount, setAmount] = useState('1,000');
-  const [source, setSource] = useState(TAB_CURRENCY[0]);
-  const [receive, setReceive] = useState(TAB_CURRENCY[1]);
-
-  const changeInput = e => {
-    const { value } = e.target;
-    setAmount(numAddComma(strToNum(value)));
-    getCurrencyRate();
-  };
-
-  const changeSelect = e => {
-    const { value } = e.target;
-    if (value !== TAB_CURRENCY[0]) setReceive(TAB_CURRENCY[0]);
-    else setReceive(TAB_CURRENCY[1]); // 앞으로 초기화
-
-    setSource(value);
-    getCurrencyRate();
-  };
-
-  const changeButton = e => {
-    const { value } = e.target;
-    setReceive(value);
   };
 
   useEffect(() => {
@@ -73,26 +68,20 @@ function TabCalc() {
       {loading && <div>loading</div>}
       {currencyToUSD && (
         <>
-          <Input type="text" onChange={changeInput} value={amount} />
-          <SelectBox onChange={changeSelect}>
-            {TAB_CURRENCY.map(item => (
-              <Option key={item} value={item}>
-                {item}
-              </Option>
-            ))}
-          </SelectBox>
+          <InputBox
+            amount={amount}
+            setAmount={setAmount}
+            setSource={setSource}
+            setReceive={setReceive}
+            getRate={getCurrencyRate}
+          />
 
           <Tab>
-            <MenuBar>
-              {Object.keys(currencyToUSD)
-                .filter(item => item.slice(3) !== source)
-                .map(s => (
-                  <Menu key={s} value={s.slice(3)} onClick={changeButton}>
-                    {s.slice(3)}
-                  </Menu>
-                ))}
-            </MenuBar>
-
+            <TabMenu
+              currencyToUSD={currencyToUSD}
+              source={source}
+              setReceive={setReceive}
+            />
             <TabContents>
               <Currency>
                 {receive}
@@ -124,12 +113,7 @@ const Container = styled.div`
   border: 2px solid #666;
 `;
 
-const Input = styled.input``;
-const SelectBox = styled.select``;
-const Option = styled.option``;
 const Tab = styled.div``;
-const MenuBar = styled.div``;
-const Menu = styled.button``;
 const TabContents = styled.div``;
 const Currency = styled.div``;
 const Date = styled.div``;
