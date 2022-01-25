@@ -3,72 +3,6 @@ import styled from 'styled-components';
 import API from 'utils/api';
 import { SIMPLE_CURRENCY_LIST } from 'utils/currency';
 
-// styled components
-const StyledContainer = styled.main`
-  flex: 1 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-
-const StyledForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  min-width: 20rem;
-
-  h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    text-align: center;
-  }
-
-  & > *:not(:first-child):not(:last-child) {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  &>*: not(: first-child) {
-    margin-top: 1rem;
-  }
-`;
-
-const StyledButton = styled.button`
-  background: #02ce89;
-  color: #fff;
-  font-weight: bold;
-  border: 1px solid #02ce89;
-  padding: 4px 0px;
-  border-radius: 50px;
-`;
-
-const StyledTitle = styled.h1`
-  color: #02ce89;
-  font-weight: bold;
-  padding: 4px 0px;
-  margin: 12px;
-`;
-
-const StyledSelect = styled.select`
-  background: #02ce89;
-  color: #fff;
-  padding: 4px 0;
-  font-size: 16px;
-  border-radius: 5px;
-`;
-
-const StyledInput = styled.input`
-  border: 1px solid #d3d7e1;
-  background: #fff;
-  border-radius: 50px;
-  padding: 4px;
-  text-align: center;
-`;
-
-const ErrorMessage = styled.p`
-  color: red;
-`;
-
 // constants
 const CALCULATOR_TITLE = '환율 계산';
 const SENDER_LABEL = '송금국가';
@@ -153,13 +87,13 @@ function SimpleCalc() {
         <StyledForm onSubmit={handleSubmit}>
           <StyledTitle>{CALCULATOR_TITLE}</StyledTitle>
           <p>
-            <span>{SENDER_LABEL}:</span>
+            <span> {SENDER_LABEL} :</span>
             <span>
               {SENDER_COUNTRY} ({SENDER_CURRENCY})
             </span>
           </p>
           <label htmlFor="currency-box">
-            {RECIPIENT_LABEL}:
+            {RECIPIENT_LABEL} :
             <StyledSelect
               name="currency"
               id="currency-box"
@@ -170,13 +104,13 @@ function SimpleCalc() {
             </StyledSelect>
           </label>
           <p>
-            <span>{CURRENCY_LABEL}:</span>
+            <span>{CURRENCY_LABEL} :</span>
             <span>
               {rate} {currency}/{SENDER_CURRENCY}
             </span>
           </p>
           <label htmlFor="amount-box">
-            송금액:
+            송금액 :
             <span>
               <StyledInput
                 type="number"
@@ -201,5 +135,75 @@ function SimpleCalc() {
     </StyledContainer>
   );
 }
+
+// styled components
+const StyledContainer = styled.main`
+  flex: 1 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  min-width: 20rem;
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  & > *:not(:first-child):not(:last-child) {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &>*: not(: first-child) {
+    margin-top: 1rem;
+  }
+`;
+
+const StyledButton = styled.button`
+  background: #02ce89;
+  color: #fff;
+  font-weight: bold;
+  border: 1px solid #02ce89;
+  padding: 4px 0px;
+  border-radius: 50px;
+`;
+
+const StyledTitle = styled.h1`
+  color: #02ce89;
+  font-weight: bold;
+  padding: 4px 0px;
+  margin: 12px;
+`;
+
+const StyledSelect = styled.select`
+  background: #02ce89;
+  color: #fff;
+  padding: 4px 0;
+  font-size: 16px;
+  border-radius: 5px;
+`;
+
+const StyledInput = styled.input`
+  border: 1px solid #d3d7e1;
+  background: #fff;
+  border-radius: 50px;
+  padding: 4px;
+  margin-right: 8px;
+  text-align: center;
+`;
+
+const ErrorMessage = styled.p`
+  color: red;
+  padding: 4px;
+  margin: 8px 4px;
+  text-align: center;
+`;
 
 export default SimpleCalc;
