@@ -5,6 +5,8 @@ const roundToSecond = num =>
     style: 'currency',
     currency: 'USD',
     maximumFractionDigits: 2,
-  }).format(num);
+  })
+    .format(num)
+    .slice(1);
 
 export { strToNum, numAddComma, roundToSecond };

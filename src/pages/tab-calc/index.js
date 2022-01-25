@@ -12,11 +12,9 @@ import TabMenu from './TabMenu';
 function TabCalc() {
   const [loading, setLoading] = useState(true);
   const [currencyRate, setCurrencyRate] = useState(null);
-
   const [amount, setAmount] = useState('1,000');
   const [source, setSource] = useState(TAB_CURRENCY[0]);
   const [receive, setReceive] = useState(TAB_CURRENCY[1]);
-
   const [date, setDate] = useState([]);
 
   const getDate = timestamp => {
@@ -26,7 +24,6 @@ function TabCalc() {
       currencyDate.toLocaleString('en-US', { month: 'short' }),
       currencyDate.getDate(),
     ];
-
     setDate(dateList);
   };
 
@@ -74,7 +71,6 @@ function TabCalc() {
             setReceive={setReceive}
             getRate={getCurrencyRate}
           />
-
           <Tab>
             <TabMenu
               currencyRate={currencyRate}
@@ -83,7 +79,7 @@ function TabCalc() {
             />
             <TabContents>
               <Currency>
-                {receive}
+                <CurrencyWord>{receive}</CurrencyWord>
                 <CurrencyConverter
                   receive={currencyRate[`USD${receive}`]}
                   source={currencyRate[`USD${source}`]}
@@ -91,8 +87,10 @@ function TabCalc() {
                 />
               </Currency>
               <Date>
-                기준일 :<br />
-                {date.join('-')}
+                <DateTitle>
+                  기준일 :<br />
+                </DateTitle>
+                <DateContent>{date.join('-')}</DateContent>
               </Date>
             </TabContents>
           </Tab>
@@ -103,18 +101,46 @@ function TabCalc() {
 }
 
 const Container = styled.div`
+  flex: 1 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  width: 800px;
+  justify-content: center;
   margin: 20px auto;
-  border: 2px solid #666;
+  padding: 20px;
+  width: 300px;
+  border: 5px solid #333;
 `;
 
 const Tab = styled.div``;
-const TabContents = styled.div``;
-const Currency = styled.div``;
+
+const TabContents = styled.div`
+  margin-top: 10px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  height: 300px;
+`;
+
+const Currency = styled.div`
+  display: flex;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 700;
+  & > * {
+    margin-right: 5px;
+  }
+`;
+
+const CurrencyWord = styled.span`
+  margin-bottom: 10px;
+`;
+
 const Date = styled.div``;
+
+const DateTitle = styled.p`
+  margin-bottom: 3px;
+`;
+
+const DateContent = styled.p``;
 
 export default TabCalc;
