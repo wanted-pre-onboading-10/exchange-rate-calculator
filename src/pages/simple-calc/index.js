@@ -87,7 +87,7 @@ function SimpleCalc() {
         <StyledForm onSubmit={handleSubmit}>
           <StyledTitle>{CALCULATOR_TITLE}</StyledTitle>
           <p>
-            <span>{SENDER_LABEL} :</span>
+            <span> {SENDER_LABEL} :</span>
             <span>
               {SENDER_COUNTRY} ({SENDER_CURRENCY})
             </span>
