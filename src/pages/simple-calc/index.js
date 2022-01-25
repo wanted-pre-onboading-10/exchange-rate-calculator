@@ -9,7 +9,22 @@ const currencyList = [
 
 function SimpleCalc() {
   const [currency, setCurrency] = useState('KRW');
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState(null);
+  const [rate, setRate] = useState(0);
+  const [showMessage, setShowMessage] = useState(false);
+  const [isWrong, setIsWrong] = useState(false);
+  const [result, setResult] = useState(0);
+
+  useEffect(() => {
+    axios
+      .get(
+        `http://www.apilayer.net/api/live?access_key=${process.env.REACT_APP_CURRENCY_KEY}`,
+      )
+      .then(res => {
+        setRate(res.data.quotes[`USD${currency}`]);
+      })
+      .catch();
+  }, [currency]);
 
   const handleSelect = e => {
     setCurrency(e.target.value);
@@ -19,9 +34,27 @@ function SimpleCalc() {
     setAmount(e.target.value);
   };
 
+  const handleSubmit = e => {
+    e.preventDefault();
+    if (
+      amount < 0 ||
+      amount > 10000 ||
+      amount === undefined ||
+      amount === null
+    ) {
+      setShowMessage(true);
+      setIsWrong(true);
+      setResult(0);
+    } else {
+      setShowMessage(true);
+      setIsWrong(false);
+      setResult(rate * amount);
+    }
+  };
+
   return (
     <>
-      <form>
+      <form onSubmit={handleSubmit}>
         <h1>환율 계산</h1>
         <p>송금국가: 미국(USD)</p>
         <label htmlFor="currency-box">
@@ -32,7 +65,9 @@ function SimpleCalc() {
             ))}
           </select>
         </label>
-        <p>환율: 1,119.93 {currency}/USD</p>
+        <p>
+          환율: {rate} {currency}/USD
+        </p>
         <label htmlFor="amount-box">
           송금액:
           <input
@@ -44,7 +79,12 @@ function SimpleCalc() {
         </label>
         <button type="submit">Submit</button>
       </form>
-      <p>수취금액은 111,993.00 {currency}입니다.</p>
+      {showMessage && isWrong && <p>송금액이 바르지 않습니다</p>}
+      {showMessage && !isWrong && (
+        <p>
+          수취금액은 {result} {currency}입니다.
+        </p>
+      )}
     </>
   );
 }
