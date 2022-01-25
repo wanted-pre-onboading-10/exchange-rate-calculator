@@ -1,70 +1,96 @@
-# Getting Started with Create React App
+# 환율 계산기
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+이 프로젝트는 다음 기능들을 지원합니다.
 
-## Available Scripts
+- 미국 달러에서 대한민국 원화, 일본 엔화, 필리핀 페소로 변환 시켜주는 계산기
+- 미국 달러, 캐나다 달러, 대한민국 원화, 홍콩 달러, 일본 엔화, 중국 위안화 간 변환 시켜주는 계산기
 
-In the project directory, you can run:
+## 배포
 
-### `npm start`
+[배포 링크](http://wanted-team-10-calculator.s3-website-us-east-1.amazonaws.com/simple)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 팀원
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- [@2kyung19](https://github.com/2kyung19)
+- [@tae100k](https://github.com/tae100k)
+- [@wook95](https://github.com/wook95)
+- [@hyundonny](https://github.com/hyundonny)
 
-### `npm test`
+## 계산기별 기능
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 심플 계산기
 
-### `npm run build`
+([@hyundonny](https://github.com/hyundonny), [@tae100k](https://github.com/tae100k))
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- 실시간 미 달러 대비 대한민국 원화, 일본 엔화, 필리핀 페소 환율 검색 기능
+- 미 달러 송금 시, 대한민국 원화, 일본 엔화, 필리핀 페소 수취 금액 계산 기능
+- 수취 금액 및 환율 계산 시 화폐 형식의 숫자 생성
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 탭 계산기
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+([@2kyung19](https://github.com/2kyung19), [@wook95](https://github.com/wook95))
 
-### `npm run eject`
+- 실시간 미국 달러, 캐나다 달러, 대한민국 원화, 홍콩 달러, 일본 엔화, 중국 위안화 간 환율 확인 기능
+- 미국 달러, 캐나다 달러, 대한민국 원화, 홍콩 달러, 일본 엔화, 중국 위안화 간 송금 수취 자율 선택
+- 사용자가 수치를 입력하거나 통화 변경 시 환율 동기화
+- 사용자가 통화 변경 시 탭 메뉴 자동 변경
+- 사용자 입력 키 제어 및 숫자 콤마 생성
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 로컬 환경 구동
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+프로젝트 클론
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+  git clone https://github.com/wanted-pre-onboading-10/exchange-rate-calculator
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+프로젝트 디렉토리 들어가기
 
-## Learn More
+```bash
+  cd exchange-rate-calculator
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+패키지 설치
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+  npm install
+```
 
-### Code Splitting
+프로젝트 시작
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+  npm run start
+```
 
-### Analyzing the Bundle Size
+## 폴더 구조
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```bash
+exchange-rate-calculator/src
+│
+├── App.js
+├── components
+│   ├── converter
+│   │   └── index.js
+│   └── nav
+│       └── index.js
+├── index.js
+├── pages
+│   ├── simple-calc
+│   │   └── index.js
+│   └── tab-calc
+│       ├── InputBox.js
+│       ├── TabMenu.js
+│       └── index.js
+├── styles
+│   └── GlobalStyles.js
+└── utils
+    ├── api.js
+    ├── convert.js
+    └── currency.js
+```
 
-### Making a Progressive Web App
+## 배운 점
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- 팀으로 일하기 위해서 git을 능숙하게 활용할 줄 알아야 한다.
+- 한 가지 문제를 풀기 위해서 여러 방식이 존재하는데, 먼저 소통하며 방식을 통일하는 것이 좋겠다.
+- 여러 CSS 선택자를 사용하는 법을 배웠다.
