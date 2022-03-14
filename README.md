@@ -5,10 +5,6 @@
 - 미국 달러에서 대한민국 원화, 일본 엔화, 필리핀 페소로 변환 시켜주는 계산기
 - 미국 달러, 캐나다 달러, 대한민국 원화, 홍콩 달러, 일본 엔화, 중국 위안화 간 변환 시켜주는 계산기
 
-## 배포
-
-[배포 링크](http://wanted-team-10-calculator.s3-website-us-east-1.amazonaws.com/simple)
-
 ## 팀원
 
 - [@2kyung19](https://github.com/2kyung19)
